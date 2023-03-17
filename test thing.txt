@@ -1,0 +1,92 @@
+// Create container
+var container = document.createElement('div');
+container.style.position = 'fixed';
+container.style.top = '0';
+container.style.left = '0';
+container.style.width = '100%';
+container.style.height = '100%';
+container.style.display = 'flex';
+container.style.justifyContent = 'center';
+container.style.alignItems = 'center';
+container.style.zIndex = '9999';
+container.style.background = 'rgba(0, 0, 0, 0.5)';
+container.addEventListener('click', function() {
+    container.remove();
+});
+
+// Create inner container
+var innerContainer = document.createElement('div');
+innerContainer.style.position = 'relative';
+innerContainer.style.zIndex = '10000';
+innerContainer.style.background = '#fff';
+innerContainer.style.boxShadow = '0 0 10px rgba(0, 0, 0, 0.5)';
+innerContainer.style.borderRadius = '5px';
+innerContainer.style.padding = '10px';
+innerContainer.style.maxWidth = '90%';
+innerContainer.style.maxHeight = '90%';
+innerContainer.style.overflow = 'auto';
+
+// Create close button
+var closeButton = document.createElement('span');
+closeButton.style.position = 'absolute';
+closeButton.style.top = '-10px';
+closeButton.style.right = '-10px';
+closeButton.style.width = '20px';
+closeButton.style.height = '20px';
+closeButton.style.borderRadius = '50%';
+closeButton.style.background = '#f00';
+closeButton.style.color = '#fff';
+closeButton.style.display = 'flex';
+closeButton.style.justifyContent = 'center';
+closeButton.style.alignItems = 'center';
+closeButton.style.cursor = 'pointer';
+closeButton.innerHTML = 'x';
+closeButton.addEventListener('click', function() {
+    container.remove();
+});
+
+// Add close button to inner container
+innerContainer.appendChild(closeButton);
+
+// Create links
+var links = [
+    { name: 'Google', url: 'https://www.google.com' },
+    { name: 'Facebook', url: 'https://www.facebook.com' },
+    { name: 'Twitter', url: 'https://www.twitter.com' },
+    { name: 'LinkedIn', url: 'https://www.linkedin.com' },
+    { name: 'GitHub', url: 'https://www.github.com' }
+];
+
+for (var i = 0; i < links.length; i++) {
+    var link = document.createElement('a');
+    link.className = 'link';
+    link.href = links[i].url;
+    link.style.display = 'block';
+    link.style.marginBottom = '5px';
+    link.innerHTML = links[i].name;
+    innerContainer.appendChild(link);
+}
+
+// Add inner container to container
+container.appendChild(innerContainer);
+
+// Make inner container draggable
+var isDragging = false;
+var mouseOffset = { x: 0, y: 0 };
+innerContainer.addEventListener('mousedown', function(event) {
+    isDragging = true;
+    mouseOffset.x = event.clientX - innerContainer.offsetLeft;
+    mouseOffset.y = event.clientY - innerContainer.offsetTop;
+});
+innerContainer.addEventListener('mouseup', function(event) {
+    isDragging = false;
+});
+innerContainer.addEventListener('mousemove', function(event) {
+    if (isDragging) {
+        innerContainer.style.left = (event.clientX - mouseOffset.x) + 'px';
+        innerContainer.style.top = (event.clientY - mouseOffset.y) + 'px';
+    }
+});
+
+// Add container to document body
+document.body.appendChild(container);
